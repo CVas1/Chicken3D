@@ -4,12 +4,11 @@ using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 
-public class CharacterMovement : MonoBehaviour
+public class CharacterMovement : Chicken
 {
     public float moveSpeed = 3f;
-    public float jumpSpeed = 5f;
+    public float jumpSpeed = 10f;
     public float gravity = 0.5f;
-    public int gap = 20;
 
     private CharacterController characterController;
     private Vector3 moveDirection;
@@ -18,27 +17,32 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private GameObject bodyPrefab;
 
     public List<GameObject> bodyParts = new List<GameObject>();
-    private List<Vector3> PositionHistory = new List<Vector3>();
-    
 
 
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
+        bodyParts.Add(gameObject);
+        
         for (int i = 0; i < 15; i++)
         {
             GrowTail();
             
         }
+
+
     }
 
     private void Update()
     {
+        TraceMaker();
+
         float moveX = Input.GetAxis("Horizontal");
         float moveZ = Input.GetAxis("Vertical");
 
-        moveDirection = new Vector3(moveX, 0f, moveZ);
-        moveDirection = transform.TransformDirection(moveDirection) * moveSpeed;
+        moveDirection = new Vector3(0f, 0f, moveZ);
+        moveDirection = transform.TransformDirection(moveDirection);
+        transform.Rotate(0f, moveX , 0f);
 
         if (characterController.isGrounded)
         {
@@ -53,11 +57,11 @@ public class CharacterMovement : MonoBehaviour
 
         moveDirection.y -= gravity;
 
-        characterController.Move(moveDirection * Time.deltaTime);
-
+        characterController.Move(moveDirection.normalized * Time.deltaTime *moveSpeed);
+        
         if (!isJumping)
             moveDirection.y = 0f;
-        PositionHistory.Insert(0, transform.position);
+        //PositionHistory.Insert(0, transform.position);
 
         //TailMovement();
 
@@ -68,7 +72,7 @@ public class CharacterMovement : MonoBehaviour
 
     }
 
-    private void TailMovement()
+    /*private void TailMovement()
     {
         
         int index = 0;
@@ -82,7 +86,7 @@ public class CharacterMovement : MonoBehaviour
         }
         print(PositionHistory.Count);
 
-    }
+    }*/
 
     private void GrowTail()
     {

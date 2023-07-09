@@ -2,20 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TailParts : MonoBehaviour
+public class TailParts : Chicken
 {
     
     private int myOrder;
     private Transform head;
-    public Vector3 lastTransform;
-    public Vector3 lookTransform;
+    TailParts tailpartsSC;
 
-    public const int gap = 20;
-    private List<Vector3> trace = new List<Vector3>();
 
     void Start()
     {
         head = GameObject.FindGameObjectWithTag("Player").gameObject.transform;
+
         for (int i = 0; i < head.GetComponent<CharacterMovement>().bodyParts.Count; i++)
         {
             if (gameObject == head.GetComponent<CharacterMovement>().bodyParts[i].gameObject)
@@ -23,41 +21,44 @@ public class TailParts : MonoBehaviour
                 myOrder = i;
             }
         }
+        if (myOrder != 0)
+        {
+            GameObject go = head.GetComponent<CharacterMovement>().bodyParts[myOrder - 1];
+            tailpartsSC = go.GetComponent<TailParts>();
+        }
         trace.Add(transform.position);
+        
     }
 
 
     private void Update()
     {
-        trace.Add(transform.position);
-        if(trace.Count > gap)
-        {
-            trace.RemoveAt(0);
-        }
-        lookTransform = trace[0];
-        lastTransform = trace[1];
+        TraceMaker();
+
+
+        moveTail();
+        
     }
 
-    private Vector3 movementVelocity;
-    [Range(0.0f, 1.0f)]
-    public float overTime = 0.2f;
-    TailParts tailpartsSC;
+    //private Vector3 movementVelocity;
+    //[Range(0.0f, 1.0f)]
+    //public float overTime = 0.2f;
 
-    void FixedUpdate()
+   
+    private void moveTail()
     {
-        if (myOrder == 0)
+        if (myOrder == 1)
         {
-            transform.position = head.position;
-                //Vector3.SmoothDamp(transform.position, head.position, ref movementVelocity, overTime);
             transform.LookAt(head.transform.position);
+            transform.position = head.GetComponent<CharacterMovement>().lastTransform;
+                //Vector3.SmoothDamp(transform.position, head.position, ref movementVelocity, overTime);
         }
         else
         {
-            GameObject go = head.GetComponent<CharacterMovement>().bodyParts[myOrder - 1];
-            tailpartsSC = go.GetComponent<TailParts>();
+
+            transform.LookAt(tailpartsSC.lastTransform);
             transform.position = tailpartsSC.lastTransform;
             //Vector3.SmoothDamp(transform.position, head.GetComponent<CharacterMovement>().bodyParts[myOrder - 1].transform.position, ref movementVelocity, overTime);
-            transform.LookAt(tailpartsSC.lookTransform);
         }
     }
 }
