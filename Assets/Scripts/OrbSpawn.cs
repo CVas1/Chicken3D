@@ -8,25 +8,23 @@ using UnityEngine;
 
 public class OrbSpawn : MonoBehaviour
 {
-    private int orbCount = -1;
+    //private int orbCount = -1;
     [SerializeField] private GameObject[] orbSpawnArea;
     [SerializeField] private GameObject orbPrefab;
-    public ReactiveProperty<int> observedValue = new ReactiveProperty<int>(-1);
+    public ReactiveProperty<int> orbCount = new ReactiveProperty<int>(0);
     [SerializeField] private int minOrbCount = 5;
 
     private void Start()
     {
-        
-        observedValue.Subscribe(newValue =>
+        for(int i = 0; i < minOrbCount; i++) { OrbSpawnOnArea(); print("for"); }
+        orbCount.Subscribe(newValue =>
         {
             if (newValue < minOrbCount)
             {
                 OrbSpawnOnArea();
             }
         });
-        observedValue.Value += 0;
-        Observable.Interval(TimeSpan.FromMilliseconds(100))
-            .Subscribe(_ => observedValue.Value -= 1) ;
+       // Observable.Interval(TimeSpan.FromSeconds(2)).Subscribe(_ => observedValue.Value -= 1) ;
 
     }
 
@@ -40,7 +38,7 @@ public class OrbSpawn : MonoBehaviour
         }
         GameObject go = Instantiate(orbPrefab, spawnPoint.position, Quaternion.identity);
         Destroy(spawnPoint.gameObject);
-        observedValue.Value += 1;
+        orbCount.Value += 1;
     }
 
     private bool CheckCollision(Vector3 position)
@@ -56,10 +54,12 @@ public class OrbSpawn : MonoBehaviour
         float z2 = endTransform.position.z;
 
         float ramdomX = UnityEngine.Random.Range(x1, x2);
-        print(ramdomX);
         float ramdomZ = UnityEngine.Random.Range(z2, z1);
         Transform randomTransform = new GameObject().transform;
         randomTransform.position = new Vector3(ramdomX, 0f, ramdomZ);
         return randomTransform;
     }
+
+
+    
 }
