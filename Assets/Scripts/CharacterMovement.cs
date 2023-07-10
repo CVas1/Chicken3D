@@ -72,12 +72,13 @@ public class CharacterMovement : Chicken
     }
 
     private OrbSpawn orbSpawn;
-
-    private void OnControllerColliderHit(ControllerColliderHit hit)
+    int i = 0;
+    private void OnTriggerEnter(Collider hit)
     {
+
         if (hit.gameObject.tag == "orb")
         {
-            print("chmove");
+            print(i++);
             Orb orb= hit.gameObject.GetComponent<Orb>();
             //orb.OrbCollected();
             orb.gameObject.SetActive(false);
