@@ -9,6 +9,9 @@ public class CharacterMovement : Chicken
 {
     private EventManager eventManager;
 
+    [SerializeField]
+    public Animator animator;
+
     public float moveSpeed = 3f;
     public float jumpSpeed = 10f;
     public float gravity = 0.5f;
@@ -28,7 +31,7 @@ public class CharacterMovement : Chicken
         eventManager = FindObjectOfType<EventManager>();
         characterController = GetComponent<CharacterController>();
         bodyParts.Add(gameObject);
-        
+
     }
 
     private void Update()
@@ -40,7 +43,7 @@ public class CharacterMovement : Chicken
 
         moveDirection = new Vector3(0f, 0f, moveZ);
         moveDirection = transform.TransformDirection(moveDirection);
-        transform.Rotate(0f, moveX * rotateSpeed , 0f);
+        transform.Rotate(0f, moveX * rotateSpeed, 0f);
 
         if (characterController.isGrounded)
         {
@@ -56,14 +59,14 @@ public class CharacterMovement : Chicken
         moveDirection.y -= gravity * Time.deltaTime;
 
         characterController.Move(moveDirection.normalized * Time.deltaTime * moveSpeed);
-        
+
         if (!isJumping)
             moveDirection.y = 0f;
-        
+
 
     }
 
-    
+
 
     private void GrowTail()
     {
@@ -72,20 +75,16 @@ public class CharacterMovement : Chicken
     }
 
     private OrbSpawn orbSpawn;
-    int i = 0;
     private void OnTriggerEnter(Collider hit)
     {
 
         if (hit.gameObject.tag == "orb")
         {
-            print(i++);
-            Orb orb= hit.gameObject.GetComponent<Orb>();
-            //orb.OrbCollected();
-            orb.gameObject.SetActive(false);
-            orbSpawn = FindObjectOfType<OrbSpawn>();
-            orbSpawn.orbCount.Value -= 1;
-            Destroy(orb);
+            EatAnimation();
+            Orb orb = hit.gameObject.GetComponent<Orb>();
+            orb.OrbCollected();
             GrowTail();
+
         }
     }
 
@@ -95,5 +94,17 @@ public class CharacterMovement : Chicken
         FindObjectOfType<EventManager>().TailGrow.AddListener(GrowTail);
     }
 
-    
+    private void RunAnimation()
+    {
+        animator.SetBool("Run", true);
+    }
+    private void RunAnimationFalse()
+    {
+        animator.SetBool("Run", false);
+    }
+    private void EatAnimation()
+    {
+        animator.SetTrigger("Eat");
+    }
+
 }

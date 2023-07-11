@@ -1,9 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UniRx;
-using UniRx.Triggers;
-using UnityAtoms.Editor;
 using UnityEngine;
 
 public class OrbSpawn : MonoBehaviour

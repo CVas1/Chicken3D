@@ -6,21 +6,20 @@ using UnityEngine;
 public class Orb : MonoBehaviour
 {
     private OrbSpawn orbSpawn;
-    private EventManager eventManager;
+    //private EventManager eventManager;
 
     private void Start()
     {
-        eventManager = FindObjectOfType<EventManager>();
+        //eventManager = FindObjectOfType<EventManager>();
     }
 
 
     public void OrbCollected()
     {
-        eventManager.TailGrowEvent();
-        print("orb");
+        gameObject.SetActive(false);
         orbSpawn = FindObjectOfType<OrbSpawn>();
         orbSpawn.orbCount.Value -= 1;
-        DestroyImmediate(gameObject);
-        
+        Destroy(gameObject);
+
     }
 }
