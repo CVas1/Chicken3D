@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.Events;
@@ -9,8 +8,6 @@ using UnityEngine.Events;
 public class CharacterMovement : Chicken
 {
     private EventManager eventManager;
-    [SerializeField] private TextMeshProUGUI text;
-    private int chickCount = 0;
 
     [SerializeField]
     public Animator animator;
@@ -28,52 +25,46 @@ public class CharacterMovement : Chicken
 
     public List<GameObject> bodyParts = new List<GameObject>();
 
-    private PauseMenu pauseMenu;
 
     private void Start()
     {
-        pauseMenu = FindObjectOfType<PauseMenu>();
         eventManager = FindObjectOfType<EventManager>();
         characterController = GetComponent<CharacterController>();
         bodyParts.Add(gameObject);
-        text.text = chickCount.ToString();
+
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        if (!pauseMenu.isPaused) {
+        TraceMaker();
 
-            float moveX = Input.GetAxis("Horizontal");
-            float moveZ = Input.GetAxis("Vertical");
+        float moveX = Input.GetAxis("Horizontal");
+        float moveZ = Input.GetAxis("Vertical");
 
-            moveDirection = new Vector3(0f, 0f, moveZ);
-            moveDirection = transform.TransformDirection(moveDirection);
-            transform.Rotate(0f, moveX * rotateSpeed, 0f);
+        moveDirection = new Vector3(0f, 0f, moveZ);
+        moveDirection = transform.TransformDirection(moveDirection);
+        transform.Rotate(0f, moveX * rotateSpeed, 0f);
 
-            if (characterController.isGrounded)
+        if (characterController.isGrounded)
+        {
+            isJumping = false;
+
+            if (Input.GetButtonDown("Jump"))
             {
-                isJumping = false;
-
-                if (Input.GetButtonDown("Jump"))
-                {
-                    moveDirection.y = jumpSpeed;
-                    isJumping = true;
-                }
+                moveDirection.y = jumpSpeed;
+                isJumping = true;
             }
-
-            moveDirection.y -= gravity * Time.deltaTime;
-
-            characterController.Move(moveDirection.normalized * Time.deltaTime * moveSpeed);
-
-            if (!isJumping)
-                moveDirection.y = 0f;
-
-            TraceMaker();
         }
-        
-    }
 
-    
+        moveDirection.y -= gravity * Time.deltaTime;
+
+        characterController.Move(moveDirection.normalized * Time.deltaTime * moveSpeed);
+
+        if (!isJumping)
+            moveDirection.y = 0f;
+
+
+    }
 
 
 
@@ -81,13 +72,9 @@ public class CharacterMovement : Chicken
     {
         GameObject tail = Instantiate(bodyPrefab);
         bodyParts.Add(tail);
-
-        chickCount++;
-        text.text = chickCount.ToString();
     }
 
     private OrbSpawn orbSpawn;
-
     private void OnTriggerEnter(Collider hit)
     {
 
