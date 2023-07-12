@@ -8,7 +8,7 @@ public class Chicken : MonoBehaviour
     public Vector3 lastTransform;
     public Vector3 lookTransform;
     protected List<Vector3> trace = new List<Vector3>();
-    protected const int gap = 20;
+    [SerializeField]protected int gap = 10;
 
 
     protected void TraceMaker()

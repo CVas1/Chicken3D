@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class TailParts : Chicken
 {
-    
+    private PauseMenu pauseMenu;
     private int myOrder;
     private Transform head;
     TailParts tailpartsSC;
-
-
+    
+    
     void Start()
     {
+        pauseMenu = FindObjectOfType<PauseMenu>();
         head = GameObject.FindGameObjectWithTag("Player").gameObject.transform;
 
         for (int i = 0; i < head.GetComponent<CharacterMovement>().bodyParts.Count; i++)
@@ -31,12 +32,15 @@ public class TailParts : Chicken
     }
 
 
-    private void Update()
+    private void FixedUpdate()
     {
-        TraceMaker();
 
-
-        moveTail();
+        if (!pauseMenu.isPaused)
+        {
+            TraceMaker();
+            moveTail();
+        }
+        
         
     }
 
