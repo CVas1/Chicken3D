@@ -11,7 +11,7 @@ public class OrbSpawn : MonoBehaviour
 
     private void Start()
     {
-        for(int i = 0; i < minOrbCount; i++) { OrbSpawnOnArea(); print("for"); }
+        for(int i = 0; i < minOrbCount; i++) { OrbSpawnOnArea(); }
         orbCount.Subscribe(newValue =>
         {
             if (newValue < minOrbCount)

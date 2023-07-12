@@ -21,8 +21,19 @@ public class PauseMenu : MonoBehaviour
             .AddTo(this);
     }
 
-    public void Pause() { isPaused = true; }
-    public void Resume() { isPaused = false; }
+    public void Pause() { 
+        isPaused = true;
+        UICamera.SetActive(true);
+        UIPanel.SetActive(true);
+        ChickenCounter.SetActive(false);
+    }
+
+    public void Resume() { 
+        isPaused = false;
+        UICamera.SetActive(false);
+        UIPanel.SetActive(false);
+        ChickenCounter.SetActive(true);
+    }
 
     
 
@@ -31,17 +42,10 @@ public class PauseMenu : MonoBehaviour
         if(isPaused)
         {
             Resume();
-            UICamera.SetActive(false);
-            UIPanel.SetActive(false);
-            ChickenCounter.SetActive(true);
         }
         else
         {
             Pause();
-            UICamera.SetActive(true); 
-            UIPanel.SetActive(true);
-            ChickenCounter.SetActive(false);
-
         }
     }
 
