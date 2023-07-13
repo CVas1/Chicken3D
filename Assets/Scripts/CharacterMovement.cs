@@ -27,17 +27,19 @@ public class CharacterMovement : Chicken
 
     public List<GameObject> bodyParts = new List<GameObject>();
 
+    private GameMaster gameMaster;
+
 
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
         bodyParts.Add(gameObject);
-    
+        gameMaster = FindAnyObjectByType<GameMaster>();
     }
 
     private void FixedUpdate()
     {
-        if (!LevelManager.Instance.isPaused) {
+        if (!gameMaster.isPaused) {
 
             float moveX = Input.GetAxis("Horizontal");
             float moveZ = Input.GetAxis("Vertical");

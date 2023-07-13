@@ -7,11 +7,16 @@ public class TailParts : Chicken
     private int myOrder;
     private Transform head;
     TailParts tailpartsSC;
-    
-    
+
+    private GameMaster gameMaster;
+
+
     void Start()
     {
         head = GameObject.FindGameObjectWithTag("Player").gameObject.transform;
+
+        gameMaster = FindAnyObjectByType<GameMaster>();
+
 
         for (int i = 0; i < head.GetComponent<CharacterMovement>().bodyParts.Count; i++)
         {
@@ -33,7 +38,7 @@ public class TailParts : Chicken
     private void FixedUpdate()
     {
 
-        if (!LevelManager.Instance.isPaused)
+        if (!gameMaster.isPaused)
         {
             TraceMaker();
             moveTail();
