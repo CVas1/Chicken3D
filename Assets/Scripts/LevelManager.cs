@@ -9,6 +9,11 @@ public class LevelManager : MonoBehaviour
 
     [SerializeField] private GameObject _loaderCanvas;
     [SerializeField] private Slider _progressBar;
+    [SerializeField] public AudioSource soundButtonClick;
+    [SerializeField] public AudioSource soundBadButtonClick;
+    [SerializeField] public AudioSource soundTemp;
+    
+
 
 
     public int clownChick = 0;
@@ -16,7 +21,8 @@ public class LevelManager : MonoBehaviour
 
 
     public float gameSpeed = 1f;
-    public int chickCountToCoin = 0;
+    public int level = 1;
+    
     public int coin = 0;
 
     private void Awake()
@@ -42,8 +48,8 @@ public class LevelManager : MonoBehaviour
 
     public async void LoadScene(string sceneName)
     {
-        coin += chickCountToCoin;
-        chickCountToCoin = 0;
+        
+       
         var scene= SceneManager.LoadSceneAsync(sceneName);
         scene.allowSceneActivation = false;
 
@@ -51,7 +57,6 @@ public class LevelManager : MonoBehaviour
 
         do
         {
-            print(scene.progress);
             _progressBar.value = scene.progress;
 
         } while (scene.progress < 0.9f);;
@@ -62,5 +67,9 @@ public class LevelManager : MonoBehaviour
         _loaderCanvas.SetActive (false);
     }
 
+    public void SoundSet(float volume)
+    {
+        soundTemp.volume = volume;
+    }
 
 }

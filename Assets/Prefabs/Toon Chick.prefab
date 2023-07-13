@@ -523,6 +523,7 @@ GameObject:
   - component: {fileID: 4429102427960218}
   - component: {fileID: 95777776565643564}
   - component: {fileID: -3141872950508581658}
+  - component: {fileID: 7116181006732868455}
   m_Layer: 0
   m_Name: Toon Chick
   m_TagString: Untagged
@@ -586,6 +587,27 @@ MonoBehaviour:
   lastTransform: {x: 0, y: 0, z: 0}
   lookTransform: {x: 0, y: 0, z: 0}
   gap: 20
+--- !u!135 &7116181006732868455
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1767663768970106}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.07
+  m_Center: {x: 0, y: 0.14, z: 0}
 --- !u!1 &1878532393300130
 GameObject:
   m_ObjectHideFlags: 0

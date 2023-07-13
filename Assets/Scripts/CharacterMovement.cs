@@ -11,8 +11,9 @@ public class CharacterMovement : Chicken
     public event Action<int> OnScoreUpdated;
     private int chickCount = 0;
 
-    [SerializeField]
-    public Animator animator;
+    [SerializeField] public Animator animator;
+    [SerializeField] private AudioSource orbSound;
+
 
     public float moveSpeed = 3f;
     public float jumpSpeed = 10f;
@@ -24,6 +25,9 @@ public class CharacterMovement : Chicken
     private bool isJumping;
 
     [SerializeField] private GameObject bodyPrefab;
+    [SerializeField] private GameObject bodyPrefabClown;
+    [SerializeField] private GameObject bodyPrefabHat;
+
 
     public List<GameObject> bodyParts = new List<GameObject>();
 
@@ -35,6 +39,9 @@ public class CharacterMovement : Chicken
         characterController = GetComponent<CharacterController>();
         bodyParts.Add(gameObject);
         gameMaster = FindAnyObjectByType<GameMaster>();
+        orbSound = GetComponent<AudioSource>();
+        clown = LevelManager.Instance.clownChick;
+        hat = LevelManager.Instance.hatChick;
     }
 
     private void FixedUpdate()
@@ -71,17 +78,41 @@ public class CharacterMovement : Chicken
         
     }
 
-    
 
+    private int clown;
+    private int hat;
 
+    private void GrowSkinIfHave() 
+    {
+
+        if(clown > 0)
+        {
+            GameObject tail = Instantiate(bodyPrefabClown);
+            bodyParts.Add(tail);
+            clown -= 1;
+        }
+        else if(hat > 0)
+        {
+            GameObject tail = Instantiate(bodyPrefabHat);
+            bodyParts.Add(tail);
+            hat -= 1;
+        }
+        else
+        {
+            GameObject tail = Instantiate(bodyPrefab);
+            bodyParts.Add(tail);
+        }
+    }
 
     private void GrowTail()
     {
-        GameObject tail = Instantiate(bodyPrefab);
-        bodyParts.Add(tail);
+        LevelManager.Instance.coin += 1;
+        GrowSkinIfHave();
 
         chickCount++;
         UpdateScore(chickCount);
+
+        orbSound.Play();
     }
 
     public void UpdateScore(int newScore)
@@ -102,6 +133,10 @@ public class CharacterMovement : Chicken
             orb.OrbCollected();
             GrowTail();
 
+        }
+        else if(hit.gameObject.tag == "object")
+        {
+            gameMaster.GameOver();
         }
     }
 
