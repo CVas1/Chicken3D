@@ -1,3 +1,4 @@
+using Lean.Touch;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ public class CharacterMovement : Chicken
     private CharacterController characterController;
     private Vector3 moveDirection;
     private bool isJumping;
-
+    float moveX = 0f;
     [SerializeField] private GameObject bodyPrefab;
     [SerializeField] private GameObject bodyPrefabClown;
     [SerializeField] private GameObject bodyPrefabHat;
@@ -48,7 +49,7 @@ public class CharacterMovement : Chicken
     {
         if (!gameMaster.isPaused) {
 
-            float moveX = Input.GetAxis("Horizontal");
+            
             float moveZ = Input.GetAxis("Vertical");
 
             moveDirection = new Vector3(0f, 0f, moveZ);
@@ -144,6 +145,12 @@ public class CharacterMovement : Chicken
     {
         // Subscribe to the event when the player becomes active/enabled
         FindObjectOfType<EventManager>().TailGrow.AddListener(GrowTail);
+        LeanTouch.OnFingerUpdate += HandleFingerUpdate;
+    }
+
+    private void OnDisable()
+    {
+        LeanTouch.OnFingerUpdate -= HandleFingerUpdate;
     }
 
     private void RunAnimation()
@@ -157,6 +164,40 @@ public class CharacterMovement : Chicken
     private void EatAnimation()
     {
         animator.SetTrigger("Eat");
+    }
+
+    //---------------------------------------LeanTouch--------------------------------------------------
+    
+
+    private void HandleFingerUpdate(LeanFinger finger)
+    {
+        if (finger.Up)
+        {
+            NoFinger();
+        }
+        else if (finger.ScreenPosition.x < Screen.width / 2)
+        {
+            LeftSideTouched();
+        }
+        else if (finger.ScreenPosition.x > Screen.width / 2)
+        {
+            RightSideTouched();
+        }
+        
+    }
+
+    private void LeftSideTouched()
+    {
+        moveX = Mathf.Lerp(moveX, -1f, 0.1f);
+    }
+
+    private void RightSideTouched()
+    {
+        moveX = Mathf.Lerp(moveX , 1f, 0.1f);
+    }
+    private void NoFinger()
+    {
+        moveX = 0f;
     }
 
 }

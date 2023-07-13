@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UniRx;
 using UnityEngine.UI;
+using Lean.Touch;
 
 public class GameMaster : MonoBehaviour
 {
@@ -136,4 +137,8 @@ public class GameMaster : MonoBehaviour
             Pause();
         }
     }
+
+
+    
+
 }
