@@ -27,6 +27,8 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private GameObject _loaderCanvas;
     [SerializeField] private Slider _progressBar;
 
+    [SerializeField] private int chickCountToFinish = 100;
+
     private float gameSpeed = 1f; 
     public int chickCountToCoin = 0;
     public int coin = 0;
@@ -60,11 +62,12 @@ public class LevelManager : MonoBehaviour
 
     private void UpdateScore(int newChick)
     {
+        chickCounterText.text = newChick.ToString();
         chickCountToCoin = newChick;
         TextGameFinished.text = "Game Finished " + newChick;
         TextGameOver.text = "Game Finished " + newChick;
 
-        if (newChick == 100)
+        if (newChick == chickCountToFinish)
         {
             GameFinished();
             gameSpeed += 0.2f;
