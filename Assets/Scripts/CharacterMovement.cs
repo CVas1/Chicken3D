@@ -8,8 +8,7 @@ using UnityEngine.Events;
 
 public class CharacterMovement : Chicken
 {
-    private EventManager eventManager;
-    [SerializeField] private TextMeshProUGUI text;
+    public event Action<int> OnScoreUpdated;
     private int chickCount = 0;
 
     [SerializeField]
@@ -28,20 +27,17 @@ public class CharacterMovement : Chicken
 
     public List<GameObject> bodyParts = new List<GameObject>();
 
-    private PauseMenu pauseMenu;
 
     private void Start()
     {
-        pauseMenu = FindObjectOfType<PauseMenu>();
-        eventManager = FindObjectOfType<EventManager>();
         characterController = GetComponent<CharacterController>();
         bodyParts.Add(gameObject);
-        text.text = chickCount.ToString();
+    
     }
 
     private void FixedUpdate()
     {
-        if (!pauseMenu.isPaused) {
+        if (!LevelManager.Instance.isPaused) {
 
             float moveX = Input.GetAxis("Horizontal");
             float moveZ = Input.GetAxis("Vertical");
@@ -83,8 +79,14 @@ public class CharacterMovement : Chicken
         bodyParts.Add(tail);
 
         chickCount++;
-        text.text = chickCount.ToString();
+        UpdateScore(chickCount);
     }
+
+    public void UpdateScore(int newScore)
+    {
+        OnScoreUpdated?.Invoke(newScore);
+    }
+
 
     private OrbSpawn orbSpawn;
 
