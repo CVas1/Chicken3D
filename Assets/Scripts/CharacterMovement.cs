@@ -50,22 +50,11 @@ public class CharacterMovement : Chicken
         if (!gameMaster.isPaused) {
 
             
-            float moveZ = Input.GetAxis("Vertical");
+            float moveZ = 1f;
 
             moveDirection = new Vector3(0f, 0f, moveZ);
             moveDirection = transform.TransformDirection(moveDirection);
             transform.Rotate(0f, moveX * rotateSpeed, 0f);
-
-            if (characterController.isGrounded)
-            {
-                isJumping = false;
-
-                if (Input.GetButtonDown("Jump"))
-                {
-                    moveDirection.y = jumpSpeed;
-                    isJumping = true;
-                }
-            }
 
             moveDirection.y -= gravity * Time.deltaTime;
 
